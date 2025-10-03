@@ -1,34 +1,22 @@
-#include "Arduino.h"
-#include "plotter.hpp"
-#pragma once
+#include "connection.hpp"
 
 
 
-class SerialCom
+SerialCom::SerialCom(int speedBaud, Plotter &machine)
+    : baudSpeed(speedBaud), CnCek(machine) {}
+
+void SerialCom::begin()
 {
-private:
-    int baudSpeed;
-
-    Plotter &CnCek;
-
-public:
-
-    SerialCom(int speedBaud, Plotter &machine) : baudSpeed(speedBaud), CnCek(machine) {}
-
-    uint8_t index = 0;
-
-    void begin()
-    {
         Serial.begin(baudSpeed);
-    }
+}
 
-    void sendStop()
-    {
+void SerialCom::sendStop()
+{
         Serial.println("STOP"); // confirmation for python
-    }
+}
 
-    void readBmp()
-    {
+void SerialCom::readBmp()
+{
             if (index == 0) {
         memset(CnCek.bmp.data, 0, CnCek.bmp.size);
         }
@@ -49,7 +37,7 @@ public:
         }
     }
 
-    void readSerial()
+    void SerialCom::readSerial()
     {
         if (Serial.available() > 0)
         {
@@ -91,4 +79,3 @@ public:
             }
         }
     }
-};
